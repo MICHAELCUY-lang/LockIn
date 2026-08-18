@@ -27,17 +27,13 @@ class LockInApplication : Application() {
     private fun restoreProtectionStateEager() {
         val dsManager = DataStoreManager(this)
         appScope.launch {
-            val monApps      = dsManager.getMonitoredAppsSync()
-            val usageLimit   = dsManager.getUsageLimitMinutesSync()
-            val lockoutDur   = dsManager.getLockoutDurationMinutesSync()
-            val isEnabled    = dsManager.isProtectionEnabledSync()
+            val rules = dsManager.getAppRulesSync()
+            val isEnabled = dsManager.isProtectionEnabledSync()
 
-            ProtectionState.monitoredPackages  = monApps
-            ProtectionState.usageLimitMs       = usageLimit * 60 * 1000L
-            ProtectionState.lockoutDurationMs  = lockoutDur * 60 * 1000L
-            ProtectionState.isProtectionActive = isEnabled && monApps.isNotEmpty()
+            ProtectionState.rules = rules
+            ProtectionState.isProtectionActive = isEnabled && rules.isNotEmpty()
 
-            android.util.Log.d("LockIn", "ProtectionState restored: active=${ProtectionState.isProtectionActive}, apps=$monApps, limit=${usageLimit}m")
+            android.util.Log.d("LockIn", "ProtectionState restored: active=${ProtectionState.isProtectionActive}, apps=${rules.keys}")
         }
     }
 }

@@ -39,8 +39,6 @@ fun HomeScreen(
     val context = LocalContext.current
     val allSessions by viewModel.allSessions.collectAsState(initial = emptyList())
     val monitoredApps by viewModel.monitoredApps.collectAsState(initial = emptySet())
-    val usageLimit by viewModel.usageLimitMinutes.collectAsState(initial = 30L)
-    val lockoutDuration by viewModel.lockoutDurationMinutes.collectAsState(initial = 30L)
     val isProtectionEnabled by viewModel.isProtectionEnabled.collectAsState(initial = false)
 
     val isActive = isProtectionEnabled && monitoredApps.isNotEmpty()
@@ -138,7 +136,7 @@ fun HomeScreen(
                     
                     // Large Timer Display
                     Text(
-                        text = if (isActive) "${usageLimit}m Limit" else "00:00",
+                        text = if (isActive) "Active" else "Inactive",
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
                         color = OnSurface,
@@ -146,7 +144,7 @@ fun HomeScreen(
                     )
                     
                     Text(
-                        text = if (isActive) "${lockoutDuration}m Lockout Duration" else "No limit set",
+                        text = if (isActive) "Watching ${monitoredApps.size} Apps" else "No rules set",
                         fontSize = 16.sp,
                         color = OnSurfaceVariant,
                         modifier = Modifier.padding(top = 8.dp)
@@ -225,14 +223,26 @@ fun HomeScreen(
                         ) {
                             // Left item
                             if (i < appsList.size) {
-                                AppCard(pkg = appsList[i], modifier = Modifier.weight(1f))
+                                AppCard(
+                                    pkg = appsList[i], 
+                                    modifier = Modifier.weight(1f).clickable {
+                                        viewModel.selectAppToConfigure(appsList[i])
+                                        navController.navigate(Screen.LockSetup.route)
+                                    }
+                                )
                             } else {
                                 AddAppButton(navController, modifier = Modifier.weight(1f))
                             }
 
                             // Right item
                             if (i + 1 < appsList.size) {
-                                AppCard(pkg = appsList[i + 1], modifier = Modifier.weight(1f))
+                                AppCard(
+                                    pkg = appsList[i + 1], 
+                                    modifier = Modifier.weight(1f).clickable {
+                                        viewModel.selectAppToConfigure(appsList[i + 1])
+                                        navController.navigate(Screen.LockSetup.route)
+                                    }
+                                )
                             } else if (i + 1 == appsList.size) {
                                 AddAppButton(navController, modifier = Modifier.weight(1f))
                             } else {
@@ -268,6 +278,14 @@ fun HomeScreen(
                     Text("No sessions recorded yet.", fontSize = 14.sp, color = OnSurfaceVariant)
                 } else {
                     allSessions.take(3).forEach { session ->
+                        val pkg = session.blockedApps.firstOrNull()
+                        val iconBitmap = remember(session.id) {
+                            pkg?.let {
+                                try { context.packageManager.getApplicationIcon(it).toBitmap(150, 150).asImageBitmap() }
+                                catch (e: Exception) { null }
+                            }
+                        }
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -277,16 +295,24 @@ fun HomeScreen(
                             Box(
                                 modifier = Modifier
                                     .size(40.dp)
-                                    .clip(CircleShape)
+                                    .clip(RoundedCornerShape(8.dp))
                                     .background(if (session.status == SessionStatus.COMPLETED) PrimaryContainer else ErrorContainer),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(
-                                    if (session.status == SessionStatus.COMPLETED) Icons.Default.TaskAlt else Icons.Default.Warning,
-                                    contentDescription = null,
-                                    tint = if (session.status == SessionStatus.COMPLETED) OnPrimaryContainer else OnErrorContainer,
-                                    modifier = Modifier.size(20.dp)
-                                )
+                                if (iconBitmap != null) {
+                                    Image(
+                                        bitmap = iconBitmap,
+                                        contentDescription = null,
+                                        modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp))
+                                    )
+                                } else {
+                                    Icon(
+                                        if (session.status == SessionStatus.COMPLETED) Icons.Default.TaskAlt else Icons.Default.Warning,
+                                        contentDescription = null,
+                                        tint = if (session.status == SessionStatus.COMPLETED) OnPrimaryContainer else OnErrorContainer,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
                             }
                             Spacer(modifier = Modifier.width(16.dp))
                             Column {

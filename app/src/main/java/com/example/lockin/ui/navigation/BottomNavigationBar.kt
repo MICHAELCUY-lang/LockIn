@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,7 +31,8 @@ fun BottomNavigationBar(navController: NavController) {
     val showBottomBar = currentRoute in listOf(
         Screen.Home.route,
         Screen.GamesDashboard.route,
-        Screen.Stats.route
+        Screen.Stats.route,
+        Screen.History.route
     )
 
     if (!showBottomBar) return
@@ -87,6 +89,19 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = {
                     if (currentRoute != Screen.Stats.route) {
                         navController.navigate(Screen.Stats.route) {
+                            popUpTo(Screen.Home.route) { inclusive = false }
+                        }
+                    }
+                }
+            )
+
+            NavItem(
+                icon = Icons.Default.History,
+                label = "History",
+                isSelected = currentRoute == Screen.History.route,
+                onClick = {
+                    if (currentRoute != Screen.History.route) {
+                        navController.navigate(Screen.History.route) {
                             popUpTo(Screen.Home.route) { inclusive = false }
                         }
                     }

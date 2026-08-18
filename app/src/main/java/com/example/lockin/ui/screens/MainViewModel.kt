@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lockin.data.local.DataStoreManager
 import com.example.lockin.domain.model.AppInfo
+import com.example.lockin.domain.model.AppRule
 import com.example.lockin.domain.repository.AppRepository
 import com.example.lockin.domain.repository.LockSessionRepository
 import com.example.lockin.service.ProtectionState
@@ -22,20 +23,25 @@ class MainViewModel @Inject constructor(
     private val _installedApps = MutableStateFlow<List<AppInfo>>(emptyList())
     val installedApps: StateFlow<List<AppInfo>> = _installedApps.asStateFlow()
 
-    private val _selectedApps = MutableStateFlow<Set<String>>(emptySet())
-    val selectedApps: StateFlow<Set<String>> = _selectedApps.asStateFlow()
+    private val _appRules = MutableStateFlow<Map<String, AppRule>>(emptyMap())
+    val appRules: StateFlow<Map<String, AppRule>> = _appRules.asStateFlow()
 
-    val monitoredApps: Flow<Set<String>> = dataStoreManager.monitoredApps
-    val usageLimitMinutes: Flow<Long> = dataStoreManager.usageLimitMinutes
-    val lockoutDurationMinutes: Flow<Long> = dataStoreManager.lockoutDurationMinutes
+    // For backward compatibility / ease of use
+    val selectedApps: StateFlow<Set<String>> = _appRules.map { it.keys }.stateIn(viewModelScope, SharingStarted.Lazily, emptySet())
+    val monitoredApps: Flow<Set<String>> = dataStoreManager.appRules.map { it.keys }
+
     val isProtectionEnabled: Flow<Boolean> = dataStoreManager.isProtectionEnabled
+
+    // The app currently being configured in LockSetupScreen
+    private val _selectedAppToConfigure = MutableStateFlow<String?>(null)
+    val selectedAppToConfigure: StateFlow<String?> = _selectedAppToConfigure.asStateFlow()
 
     val activeSession = lockSessionRepository.getActiveSession()
     val allSessions = lockSessionRepository.getAllSessions()
 
     init {
         loadApps()
-        loadSavedMonitoredApps()
+        loadSavedAppRules()
         restoreProtectionState()
     }
 
@@ -45,93 +51,79 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun loadSavedMonitoredApps() {
+    private fun loadSavedAppRules() {
         viewModelScope.launch {
-            val saved = dataStoreManager.getMonitoredAppsSync()
+            val saved = dataStoreManager.getAppRulesSync()
             if (saved.isNotEmpty()) {
-                _selectedApps.value = saved
+                _appRules.value = saved
             }
         }
     }
 
-    /**
-     * On app start, restore ProtectionState from persisted DataStore settings
-     * so the AccessibilityService can function immediately after reboot/restart.
-     */
     private fun restoreProtectionState() {
         viewModelScope.launch {
-            val monApps      = dataStoreManager.getMonitoredAppsSync()
-            val usageLimit   = dataStoreManager.getUsageLimitMinutesSync()
-            val lockoutDur   = dataStoreManager.getLockoutDurationMinutesSync()
+            val rules = dataStoreManager.getAppRulesSync()
+            val isActive = rules.isNotEmpty()
 
-            // isProtectionEnabled default is true in DataStore, but we only
-            // treat protection as active if apps are actually configured.
-            val isActive = monApps.isNotEmpty()
-
-            ProtectionState.monitoredPackages  = monApps
-            ProtectionState.usageLimitMs       = usageLimit * 60 * 1000L
-            ProtectionState.lockoutDurationMs  = lockoutDur * 60 * 1000L
+            ProtectionState.rules = rules
             ProtectionState.isProtectionActive = isActive
 
-            android.util.Log.d("LockIn", "ViewModel restored ProtectionState: active=$isActive, apps=$monApps, limit=${usageLimit}m")
+            android.util.Log.d("LockIn", "ViewModel restored ProtectionState: active=$isActive, rules size=${rules.size}")
         }
     }
 
+    fun selectAppToConfigure(pkg: String) {
+        _selectedAppToConfigure.value = pkg
+    }
+
     fun toggleAppSelection(packageName: String) {
-        _selectedApps.update { current ->
-            if (current.contains(packageName)) current - packageName
-            else current + packageName
+        val currentRules = _appRules.value.toMutableMap()
+        
+        if (currentRules.containsKey(packageName)) {
+            currentRules.remove(packageName)
+        } else {
+            currentRules[packageName] = AppRule(packageName, usageLimitMinutes = 30L, lockoutDurationMinutes = 30L)
+        }
+        
+        _appRules.value = currentRules
+
+        viewModelScope.launch {
+            dataStoreManager.setAppRules(currentRules)
+            ProtectionState.rules = currentRules
+            
+            val isActive = currentRules.isNotEmpty()
+            ProtectionState.isProtectionActive = isActive
+            dataStoreManager.setProtectionEnabled(isActive)
         }
     }
 
     fun clearSelection() {
-        _selectedApps.value = emptySet()
+        _appRules.value = emptyMap()
     }
 
-    /**
-     * Save protection config to DataStore AND immediately apply to ProtectionState
-     * so the service responds instantly without async delays.
-     */
-    fun saveProtectionConfig(usageLimitMinutes: Long, lockoutDurationMinutes: Long) {
-        val apps       = _selectedApps.value
-        val usageLimitMs = usageLimitMinutes * 60 * 1000L
-        val lockoutMs    = lockoutDurationMinutes * 60 * 1000L
+    fun saveAppRule(packageName: String, usageLimitMinutes: Long, lockoutDurationMinutes: Long) {
+        val currentRules = _appRules.value.toMutableMap()
+        currentRules[packageName] = AppRule(packageName, usageLimitMinutes, lockoutDurationMinutes)
+        
+        _appRules.value = currentRules
 
-        // 1. Immediately push to in-memory singleton (service reads this synchronously)
-        ProtectionState.monitoredPackages  = apps
-        ProtectionState.usageLimitMs       = usageLimitMs
-        ProtectionState.lockoutDurationMs  = lockoutMs
-        ProtectionState.isProtectionActive = apps.isNotEmpty()
+        ProtectionState.rules = currentRules
+        ProtectionState.isProtectionActive = currentRules.isNotEmpty()
 
-        android.util.Log.d("LockIn", "saveProtectionConfig: apps=$apps, limit=${usageLimitMinutes}m, lockout=${lockoutDurationMinutes}m, active=${apps.isNotEmpty()}")
-
-        // 2. Persist to DataStore (async, for recovery after restarts)
         viewModelScope.launch {
-            dataStoreManager.setMonitoredApps(apps)
-            dataStoreManager.setUsageLimitMinutes(usageLimitMinutes)
-            dataStoreManager.setLockoutDurationMinutes(lockoutDurationMinutes)
-            dataStoreManager.setProtectionEnabled(apps.isNotEmpty())
-            android.util.Log.d("LockIn", "DataStore saved: apps=$apps")
+            dataStoreManager.setAppRules(currentRules)
+            dataStoreManager.setProtectionEnabled(currentRules.isNotEmpty())
         }
     }
 
-    /**
-     * Instantly lock selected apps for the given duration.
-     * This writes to Room DB AND immediately applies the hard lock in ProtectionState.
-     */
-    fun startInstantLockSession(lockoutDurationMinutes: Long) {
-        val apps = _selectedApps.value.toList()
+    fun startInstantLockSessionForApp(packageName: String, lockoutDurationMinutes: Long) {
         val lockoutMs = lockoutDurationMinutes * 60 * 1000L
         val endTime = System.currentTimeMillis() + lockoutMs
 
-        // Immediately hard-lock in memory (service will enforce on very next window change)
-        apps.forEach { pkg ->
-            ProtectionState.hardLock(pkg, endTime)
-        }
+        ProtectionState.hardLock(packageName, endTime)
 
-        // Also persist to Room DB for crash recovery
         viewModelScope.launch {
-            lockSessionRepository.startSession(lockoutMs, apps)
+            lockSessionRepository.startSession(lockoutMs, listOf(packageName))
         }
     }
 }

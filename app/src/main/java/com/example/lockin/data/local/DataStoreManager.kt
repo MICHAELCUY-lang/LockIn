@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.lockin.domain.model.AppRule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -14,9 +15,8 @@ class DataStoreManager(private val context: Context) {
 
     companion object {
         val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
-        val MONITORED_APPS = stringSetPreferencesKey("monitored_apps")
-        val USAGE_LIMIT_MINUTES = longPreferencesKey("usage_limit_minutes")
-        val LOCKOUT_DURATION_MINUTES = longPreferencesKey("lockout_duration_minutes")
+        // Storing AppRule serialized strings
+        val APP_RULES = stringSetPreferencesKey("app_rules_set")
         val IS_PROTECTION_ENABLED = booleanPreferencesKey("is_protection_enabled")
     }
 
@@ -24,16 +24,10 @@ class DataStoreManager(private val context: Context) {
         preferences[ONBOARDING_COMPLETED] ?: false
     }
 
-    val monitoredApps: Flow<Set<String>> = context.dataStore.data.map { preferences ->
-        preferences[MONITORED_APPS] ?: emptySet()
-    }
-
-    val usageLimitMinutes: Flow<Long> = context.dataStore.data.map { preferences ->
-        preferences[USAGE_LIMIT_MINUTES] ?: 30L
-    }
-
-    val lockoutDurationMinutes: Flow<Long> = context.dataStore.data.map { preferences ->
-        preferences[LOCKOUT_DURATION_MINUTES] ?: 30L
+    val appRules: Flow<Map<String, AppRule>> = context.dataStore.data.map { preferences ->
+        val rawSet = preferences[APP_RULES] ?: emptySet()
+        rawSet.mapNotNull { AppRule.fromSerializedString(it) }
+            .associateBy { it.packageName }
     }
 
     val isProtectionEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
@@ -46,21 +40,9 @@ class DataStoreManager(private val context: Context) {
         }
     }
 
-    suspend fun setMonitoredApps(apps: Set<String>) {
+    suspend fun setAppRules(rules: Map<String, AppRule>) {
         context.dataStore.edit { preferences ->
-            preferences[MONITORED_APPS] = apps
-        }
-    }
-
-    suspend fun setUsageLimitMinutes(minutes: Long) {
-        context.dataStore.edit { preferences ->
-            preferences[USAGE_LIMIT_MINUTES] = minutes
-        }
-    }
-
-    suspend fun setLockoutDurationMinutes(minutes: Long) {
-        context.dataStore.edit { preferences ->
-            preferences[LOCKOUT_DURATION_MINUTES] = minutes
+            preferences[APP_RULES] = rules.values.map { it.toSerializedString() }.toSet()
         }
     }
 
@@ -70,16 +52,10 @@ class DataStoreManager(private val context: Context) {
         }
     }
 
-    suspend fun getMonitoredAppsSync(): Set<String> {
-        return context.dataStore.data.first()[MONITORED_APPS] ?: emptySet()
-    }
-
-    suspend fun getUsageLimitMinutesSync(): Long {
-        return context.dataStore.data.first()[USAGE_LIMIT_MINUTES] ?: 30L
-    }
-
-    suspend fun getLockoutDurationMinutesSync(): Long {
-        return context.dataStore.data.first()[LOCKOUT_DURATION_MINUTES] ?: 30L
+    suspend fun getAppRulesSync(): Map<String, AppRule> {
+        val rawSet = context.dataStore.data.first()[APP_RULES] ?: emptySet()
+        return rawSet.mapNotNull { AppRule.fromSerializedString(it) }
+            .associateBy { it.packageName }
     }
 
     suspend fun isProtectionEnabledSync(): Boolean {

@@ -84,7 +84,7 @@ fun AppSelectionScreen(
                         .padding(horizontal = 20.dp, vertical = 16.dp)
                 ) {
                     Button(
-                        onClick = { navController.navigate(Screen.LockSetup.route) },
+                        onClick = { navController.popBackStack() },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(54.dp),
@@ -97,7 +97,7 @@ fun AppSelectionScreen(
                     ) {
                         Text(
                             text = if (selected.isNotEmpty()) {
-                                "LOCK ${selected.size} APP${if (selected.size > 1) "S" else ""}"
+                                "ADD ${selected.size} APP${if (selected.size > 1) "S" else ""}"
                             } else {
                                 "SELECT AT LEAST 1 APP"
                             },

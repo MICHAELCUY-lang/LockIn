@@ -39,7 +39,7 @@ fun LockInNavGraph(
             ActiveLockScreen(navController = navController, viewModel = sharedViewModel)
         }
         composable(route = Screen.History.route) {
-            HistoryScreen(navController = navController)
+            HistoryScreen(navController = navController, viewModel = sharedViewModel)
         }
         composable(route = Screen.Stats.route) {
             StatsScreen(navController = navController, viewModel = sharedViewModel)

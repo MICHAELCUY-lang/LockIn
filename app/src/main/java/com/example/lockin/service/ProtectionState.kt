@@ -20,15 +20,7 @@ object ProtectionState {
     var isProtectionActive: Boolean = false
 
     @Volatile
-    var monitoredPackages: Set<String> = emptySet()
-
-    // Usage limit in milliseconds
-    @Volatile
-    var usageLimitMs: Long = 30 * 60 * 1000L // 30 min default
-
-    // Lockout duration in milliseconds
-    @Volatile
-    var lockoutDurationMs: Long = 30 * 60 * 1000L // 30 min default
+    var rules: Map<String, com.example.lockin.domain.model.AppRule> = emptyMap()
 
     // ---- In-memory usage accumulator per package (ms) ----
     private val _usageMap = HashMap<String, Long>()

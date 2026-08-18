@@ -85,7 +85,7 @@ class LockAccessibilityService : AccessibilityService() {
             return
         }
 
-        Log.d(TAG, "Foreground → $newPkg | protection=${ProtectionState.isProtectionActive} | monitored=${ProtectionState.monitoredPackages}")
+        Log.d(TAG, "Foreground → $newPkg | protection=${ProtectionState.isProtectionActive} | monitored=${ProtectionState.rules.keys}")
 
         // 3. If ProtectionState is empty, self-heal from DataStore
         ensureStateLoaded()
@@ -117,12 +117,16 @@ class LockAccessibilityService : AccessibilityService() {
             Log.d(TAG, "Protection not active, skipping $newPkg")
             return
         }
-        if (!ProtectionState.monitoredPackages.contains(newPkg)) {
+        val appRule = ProtectionState.rules[newPkg]
+        if (appRule == null) {
             Log.d(TAG, "$newPkg is not monitored")
             return
         }
 
-        Log.d(TAG, "Monitoring $newPkg (usage so far: ${ProtectionState.getUsage(newPkg) / 1000}s, limit: ${ProtectionState.usageLimitMs / 1000}s)")
+        val usageLimitMs = appRule.usageLimitMinutes * 60 * 1000L
+        val lockoutMs = appRule.lockoutDurationMinutes * 60 * 1000L
+
+        Log.d(TAG, "Monitoring $newPkg (usage so far: ${ProtectionState.getUsage(newPkg) / 1000}s, limit: ${usageLimitMs / 1000}s)")
 
         // 6. Start 500ms tick loop to accumulate usage
         trackingJob = scope.launch {
@@ -134,11 +138,10 @@ class LockAccessibilityService : AccessibilityService() {
                 val elapsed    = System.currentTimeMillis() - trackStartTime
                 val totalUsage = ProtectionState.getUsage(newPkg) + elapsed
 
-                Log.d(TAG, "$newPkg usage: ${totalUsage / 1000}s / ${ProtectionState.usageLimitMs / 1000}s")
+                Log.d(TAG, "$newPkg usage: ${totalUsage / 1000}s / ${usageLimitMs / 1000}s")
 
-                if (totalUsage >= ProtectionState.usageLimitMs) {
+                if (totalUsage >= usageLimitMs) {
                     // LIMIT REACHED
-                    val lockoutMs  = ProtectionState.lockoutDurationMs
                     val lockoutEnd = System.currentTimeMillis() + lockoutMs
 
                     ProtectionState.hardLock(newPkg, lockoutEnd)
@@ -157,17 +160,13 @@ class LockAccessibilityService : AccessibilityService() {
 
     private suspend fun ensureStateLoaded() {
         // Only reload if protection packages are empty (i.e. never loaded or cleared)
-        if (ProtectionState.monitoredPackages.isNotEmpty()) return
+        if (ProtectionState.rules.isNotEmpty()) return
 
-        val monApps    = dataStore.getMonitoredAppsSync()
-        val usageLimit = dataStore.getUsageLimitMinutesSync()
-        val lockoutDur = dataStore.getLockoutDurationMinutesSync()
+        val rules    = dataStore.getAppRulesSync()
         val isEnabled  = dataStore.isProtectionEnabledSync()
 
-        ProtectionState.monitoredPackages  = monApps
-        ProtectionState.usageLimitMs       = usageLimit * 60 * 1000L
-        ProtectionState.lockoutDurationMs  = lockoutDur * 60 * 1000L
-        ProtectionState.isProtectionActive = isEnabled && monApps.isNotEmpty()
+        ProtectionState.rules  = rules
+        ProtectionState.isProtectionActive = isEnabled && rules.isNotEmpty()
 
         // Sync hard locks from DB
         val activeSession = lockSessionRepository.getActiveSessionSync()
@@ -182,7 +181,7 @@ class LockAccessibilityService : AccessibilityService() {
             }
         }
 
-        Log.d(TAG, "State self-healed: active=${ProtectionState.isProtectionActive}, apps=$monApps, limit=${usageLimit}m")
+        Log.d(TAG, "State self-healed: active=${ProtectionState.isProtectionActive}, apps=${rules.keys}")
     }
 
     private fun showBlocker(blockedPkg: String, endTime: Long) {
