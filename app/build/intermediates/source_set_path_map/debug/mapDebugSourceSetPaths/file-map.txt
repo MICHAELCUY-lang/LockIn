@@ -1,0 +1,65 @@
+com.example.lockin.app-resValues-0 C:\CODING\LockIn project\app\build\generated\res\resValues\debug
+com.example.lockin.app-packageDebugResources-1 C:\CODING\LockIn project\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.lockin.app-packageDebugResources-2 C:\CODING\LockIn project\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.lockin.app-debug-3 C:\CODING\LockIn project\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.example.lockin.app-debug-4 C:\CODING\LockIn project\app\src\debug\res
+com.example.lockin.app-main-5 C:\CODING\LockIn project\app\src\main\res
+com.example.lockin.app-customview-poolingcontainer-1.0.0-6 C:\Users\mbrya\.gradle\caches\transforms-4\069919d8441a7ed5dde351a1380f8163\transformed\customview-poolingcontainer-1.0.0\res
+com.example.lockin.app-lifecycle-viewmodel-compose-release-7 C:\Users\mbrya\.gradle\caches\transforms-4\0ad9be4ca17c6e2c692e56bbb0634bfc\transformed\lifecycle-viewmodel-compose-release\res
+com.example.lockin.app-navigation-runtime-ktx-2.7.7-8 C:\Users\mbrya\.gradle\caches\transforms-4\0d0e2da4fb0d75d69c5c60794c9a0fb3\transformed\navigation-runtime-ktx-2.7.7\res
+com.example.lockin.app-ui-unit-release-9 C:\Users\mbrya\.gradle\caches\transforms-4\0e4288012ab1fc6e76dec264851175b1\transformed\ui-unit-release\res
+com.example.lockin.app-activity-1.9.0-10 C:\Users\mbrya\.gradle\caches\transforms-4\0eee08c096ecbb705e766b97a3db89b6\transformed\activity-1.9.0\res
+com.example.lockin.app-ui-tooling-data-release-11 C:\Users\mbrya\.gradle\caches\transforms-4\149e288b7648f3b8763ab39434740304\transformed\ui-tooling-data-release\res
+com.example.lockin.app-ui-release-12 C:\Users\mbrya\.gradle\caches\transforms-4\17546daaa6f9224134ae7673569acdf2\transformed\ui-release\res
+com.example.lockin.app-material-icons-core-release-13 C:\Users\mbrya\.gradle\caches\transforms-4\19a5f61d8fe38bcb697447a44d0485aa\transformed\material-icons-core-release\res
+com.example.lockin.app-sqlite-2.4.0-14 C:\Users\mbrya\.gradle\caches\transforms-4\1c39084f9a0aa489ccbae0007d99f9ee\transformed\sqlite-2.4.0\res
+com.example.lockin.app-activity-ktx-1.9.0-15 C:\Users\mbrya\.gradle\caches\transforms-4\2223ccf5fd47eb322f0042d54fdbe483\transformed\activity-ktx-1.9.0\res
+com.example.lockin.app-datastore-core-release-16 C:\Users\mbrya\.gradle\caches\transforms-4\2226804fab6caf3e3cda751558472f1a\transformed\datastore-core-release\res
+com.example.lockin.app-startup-runtime-1.1.1-17 C:\Users\mbrya\.gradle\caches\transforms-4\2405d4ae8832bc92f44a83a197a21411\transformed\startup-runtime-1.1.1\res
+com.example.lockin.app-navigation-runtime-2.7.7-18 C:\Users\mbrya\.gradle\caches\transforms-4\250ccb713c6340b3b3b315ef0f99845f\transformed\navigation-runtime-2.7.7\res
+com.example.lockin.app-lifecycle-viewmodel-savedstate-2.8.3-19 C:\Users\mbrya\.gradle\caches\transforms-4\25a0635462a08f7a4be9a820975b4d52\transformed\lifecycle-viewmodel-savedstate-2.8.3\res
+com.example.lockin.app-animation-release-20 C:\Users\mbrya\.gradle\caches\transforms-4\265b92ffc064897ff297b0a1eca05e8b\transformed\animation-release\res
+com.example.lockin.app-ui-geometry-release-21 C:\Users\mbrya\.gradle\caches\transforms-4\2857e5ca827ac472aee26b2903f0c286\transformed\ui-geometry-release\res
+com.example.lockin.app-material-release-22 C:\Users\mbrya\.gradle\caches\transforms-4\29a6b857a62da4b5782e3c9d79ae441c\transformed\material-release\res
+com.example.lockin.app-navigation-common-2.7.7-23 C:\Users\mbrya\.gradle\caches\transforms-4\2dd6dc82f6f4c6dffd2a2160a35fa981\transformed\navigation-common-2.7.7\res
+com.example.lockin.app-hilt-navigation-compose-1.2.0-24 C:\Users\mbrya\.gradle\caches\transforms-4\3da2aa96c119df9dcaa9f08005ef8962\transformed\hilt-navigation-compose-1.2.0\res
+com.example.lockin.app-room-runtime-2.6.1-25 C:\Users\mbrya\.gradle\caches\transforms-4\48842625c3be30f38774654e9d09cd07\transformed\room-runtime-2.6.1\res
+com.example.lockin.app-profileinstaller-1.3.1-26 C:\Users\mbrya\.gradle\caches\transforms-4\506839e5103180bd3e8a6f5c0708ab67\transformed\profileinstaller-1.3.1\res
+com.example.lockin.app-ui-util-release-27 C:\Users\mbrya\.gradle\caches\transforms-4\53904efa2bd3125024a3af12474948e8\transformed\ui-util-release\res
+com.example.lockin.app-lifecycle-livedata-2.8.3-28 C:\Users\mbrya\.gradle\caches\transforms-4\57cb9b73ad87291baef2f9da7530dfc5\transformed\lifecycle-livedata-2.8.3\res
+com.example.lockin.app-ui-tooling-release-29 C:\Users\mbrya\.gradle\caches\transforms-4\6ba78966ac7d05d7fd2500b3e3b77322\transformed\ui-tooling-release\res
+com.example.lockin.app-annotation-experimental-1.4.0-30 C:\Users\mbrya\.gradle\caches\transforms-4\6d89ee3a58301b16282c63bb33b4d286\transformed\annotation-experimental-1.4.0\res
+com.example.lockin.app-emoji2-1.3.0-31 C:\Users\mbrya\.gradle\caches\transforms-4\71d268513dba1c5a421924b75c6e6a16\transformed\emoji2-1.3.0\res
+com.example.lockin.app-lifecycle-process-2.8.3-32 C:\Users\mbrya\.gradle\caches\transforms-4\735c89445f46191dde62fba68fda8f34\transformed\lifecycle-process-2.8.3\res
+com.example.lockin.app-savedstate-1.2.1-33 C:\Users\mbrya\.gradle\caches\transforms-4\7400e290bd4e3f74e4d3c49256f423bb\transformed\savedstate-1.2.1\res
+com.example.lockin.app-ui-text-release-34 C:\Users\mbrya\.gradle\caches\transforms-4\76136cdc844ccb7706b6f999d578a303\transformed\ui-text-release\res
+com.example.lockin.app-runtime-release-35 C:\Users\mbrya\.gradle\caches\transforms-4\76ba793f0f6514c664ae97d08e7a9e56\transformed\runtime-release\res
+com.example.lockin.app-lifecycle-viewmodel-release-36 C:\Users\mbrya\.gradle\caches\transforms-4\7b2737688f7c34360bfb9a4462245629\transformed\lifecycle-viewmodel-release\res
+com.example.lockin.app-fragment-1.5.1-37 C:\Users\mbrya\.gradle\caches\transforms-4\7c2ecce974632f0e479b1983088980ad\transformed\fragment-1.5.1\res
+com.example.lockin.app-navigation-compose-2.7.7-38 C:\Users\mbrya\.gradle\caches\transforms-4\7cc34fc5f47924743a3c0f62530dc6a3\transformed\navigation-compose-2.7.7\res
+com.example.lockin.app-runtime-saveable-release-39 C:\Users\mbrya\.gradle\caches\transforms-4\8181eb0c30f080eb15ba7cf4ce94e8f5\transformed\runtime-saveable-release\res
+com.example.lockin.app-core-ktx-1.13.1-40 C:\Users\mbrya\.gradle\caches\transforms-4\8654b60d286248b0769b2b735ebb38c2\transformed\core-ktx-1.13.1\res
+com.example.lockin.app-room-ktx-2.6.1-41 C:\Users\mbrya\.gradle\caches\transforms-4\87b010cd87bb9ac0007d7f3c1072c2af\transformed\room-ktx-2.6.1\res
+com.example.lockin.app-datastore-preferences-release-42 C:\Users\mbrya\.gradle\caches\transforms-4\883763c74af2aadf7c5450b00aa84c3e\transformed\datastore-preferences-release\res
+com.example.lockin.app-lifecycle-runtime-ktx-release-43 C:\Users\mbrya\.gradle\caches\transforms-4\888895ecd8cfaeb31bd544c331e87e4a\transformed\lifecycle-runtime-ktx-release\res
+com.example.lockin.app-lifecycle-livedata-core-ktx-2.8.3-44 C:\Users\mbrya\.gradle\caches\transforms-4\8bd4363167f34eeb33f6f25aa6c11fd2\transformed\lifecycle-livedata-core-ktx-2.8.3\res
+com.example.lockin.app-foundation-release-45 C:\Users\mbrya\.gradle\caches\transforms-4\9268fcbd8df5e3a59b3fc368ce0c1f8b\transformed\foundation-release\res
+com.example.lockin.app-hilt-navigation-1.2.0-46 C:\Users\mbrya\.gradle\caches\transforms-4\9ecd5d215d752f93f406a1235893bfea\transformed\hilt-navigation-1.2.0\res
+com.example.lockin.app-material-icons-extended-release-47 C:\Users\mbrya\.gradle\caches\transforms-4\a03ba028b5b835d7cf9874fffb9f6627\transformed\material-icons-extended-release\res
+com.example.lockin.app-core-1.13.1-48 C:\Users\mbrya\.gradle\caches\transforms-4\a21bb84d02e433e4eba9fef5220ee3b0\transformed\core-1.13.1\res
+com.example.lockin.app-lifecycle-viewmodel-ktx-2.8.3-49 C:\Users\mbrya\.gradle\caches\transforms-4\a42e5ffe61fcfcc459011e7ff4526f8b\transformed\lifecycle-viewmodel-ktx-2.8.3\res
+com.example.lockin.app-material-ripple-release-50 C:\Users\mbrya\.gradle\caches\transforms-4\a4d834ad47e85e25bc2c3972f45fd1f4\transformed\material-ripple-release\res
+com.example.lockin.app-material3-release-51 C:\Users\mbrya\.gradle\caches\transforms-4\a56ddc7a030ec8dd0f910480feafb5bc\transformed\material3-release\res
+com.example.lockin.app-navigation-common-ktx-2.7.7-52 C:\Users\mbrya\.gradle\caches\transforms-4\a6bb3d01d668acf38d7b401ab868cd1c\transformed\navigation-common-ktx-2.7.7\res
+com.example.lockin.app-datastore-release-53 C:\Users\mbrya\.gradle\caches\transforms-4\a84468be40ec27bd280983a466d2c941\transformed\datastore-release\res
+com.example.lockin.app-lifecycle-runtime-release-54 C:\Users\mbrya\.gradle\caches\transforms-4\b67f445a7138768eeca80267ebcf9c4d\transformed\lifecycle-runtime-release\res
+com.example.lockin.app-animation-core-release-55 C:\Users\mbrya\.gradle\caches\transforms-4\b9957c09a2d5fb84dc4d84269dda1471\transformed\animation-core-release\res
+com.example.lockin.app-activity-compose-1.9.0-56 C:\Users\mbrya\.gradle\caches\transforms-4\c871fe71a5eb67ce41f59a3f0d66b8b3\transformed\activity-compose-1.9.0\res
+com.example.lockin.app-foundation-layout-release-57 C:\Users\mbrya\.gradle\caches\transforms-4\c9da97c8eab34000e260be30773c599c\transformed\foundation-layout-release\res
+com.example.lockin.app-lifecycle-livedata-core-2.8.3-58 C:\Users\mbrya\.gradle\caches\transforms-4\d12423105ef3accf8430b233fe207363\transformed\lifecycle-livedata-core-2.8.3\res
+com.example.lockin.app-sqlite-framework-2.4.0-59 C:\Users\mbrya\.gradle\caches\transforms-4\d1b91177dbe0ddc0163aaca8ddc938b5\transformed\sqlite-framework-2.4.0\res
+com.example.lockin.app-ui-test-manifest-1.6.8-60 C:\Users\mbrya\.gradle\caches\transforms-4\d333cd7f276b0ea392389f1d58b50f46\transformed\ui-test-manifest-1.6.8\res
+com.example.lockin.app-core-runtime-2.2.0-61 C:\Users\mbrya\.gradle\caches\transforms-4\da7a538549a9cf25663db394386a7876\transformed\core-runtime-2.2.0\res
+com.example.lockin.app-ui-tooling-preview-release-62 C:\Users\mbrya\.gradle\caches\transforms-4\e59b51e422ecdb55d2a1b02b2181fe06\transformed\ui-tooling-preview-release\res
+com.example.lockin.app-savedstate-ktx-1.2.1-63 C:\Users\mbrya\.gradle\caches\transforms-4\e730baf6e8f22cc73c4d8b6c619eac5a\transformed\savedstate-ktx-1.2.1\res
+com.example.lockin.app-ui-graphics-release-64 C:\Users\mbrya\.gradle\caches\transforms-4\ef4fde0c7115adb13b1a4d4285b034a4\transformed\ui-graphics-release\res
