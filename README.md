@@ -24,7 +24,7 @@ Aplikasi ini dibangun menggunakan teknologi native Android terbaru:
 
 1.  Clone repositori ini:
     ```bash
-    git clone https://github.com/yourusername/lockin.git
+    git clone https://github.com/MICHAELCUY-lang/LockIn.git
     ```
 2.  Buka proyek menggunakan **Android Studio** (Koala atau versi lebih baru direkomendasikan).
 3.  Pastikan device/emulator kamu menjalankan minimal **Android 12 (API 31)**.
